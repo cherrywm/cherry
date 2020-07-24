@@ -29,7 +29,9 @@ void start_loop(void) {
 
     do {
         if ((ev = xcb_poll_for_event(connection))) {
-            switch (ev->response_type & ~0x80) {
+            uint8_t response_type = ev->response_type & ~0x80;
+
+            switch (response_type) {
                 default:
                     break; // Skeleton loop.
             }
