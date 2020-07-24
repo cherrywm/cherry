@@ -3,6 +3,7 @@
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
+#include <time.h>
 #include <xcb/xcb.h>
 
 #include "lua.h"
@@ -15,6 +16,7 @@ static const xcb_setup_t *setup;       // xcb setup pointer.
 static xcb_screen_t *screen;           // First screen. todo: multiple monitor support.
 static lua_State *lua_state;           // Lua state. Used for configuration.
 
+const struct timespec delay = {0, 50000000L}; // Prevents the loop from consuming 100% of its respective core all the time.
 
 void stop_running(int _unused) {
     keep_running = 0;
@@ -32,6 +34,8 @@ void start_loop(void) {
                     break; // Skeleton loop.
             }
         }
+
+        nanosleep(&delay, NULL);
     } while (keep_running);
 
     // TODO: Iterate through desktops & free them.
