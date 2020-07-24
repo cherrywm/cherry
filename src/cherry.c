@@ -6,8 +6,8 @@
 #include <time.h>
 #include <xcb/xcb.h>
 
-#include "lua.h"
-#include "lauxlib.h"
+#include <lua.h>
+#include <lauxlib.h>
 #include <lualib.h>
 
 static volatile int keep_running;      // Used to keep loop running.
