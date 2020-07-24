@@ -1,48 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <signal.h>
 #include <unistd.h>
-#include <time.h>
 
-#include "cherry.h"
-
+#include "loop.h"
 #include <lauxlib.h>
 #include <lualib.h>
 
+// I immensely dislike storing global state :(
 static struct cherry_state_t *state;
-
-const struct timespec delay = {0, 50000000L}; // Prevents the loop from consuming 100% of its respective core all the time.
 
 void stop_running(int _unused) {
     state->keep_running = 0;
     (void)(_unused);
-}
-
-void start_loop(void) {
-    state->keep_running = 1;
-    xcb_generic_event_t *ev;
-
-    do {
-        if ((ev = xcb_poll_for_event(state->connection))) {
-            uint8_t response_type = ev->response_type & ~0x80;
-
-            switch (response_type) {
-                default:
-                    break; // Skeleton loop.
-            }
-        }
-
-        nanosleep(&delay, NULL);
-    } while (state->keep_running);
-
-    // TODO: Iterate through desktops & free them.
-
-    // Close connection to X server.
-    xcb_disconnect(state->connection);
-
-    // Exit with a successful status code.
-    exit(0);
 }
 
 int main(void) {
@@ -51,8 +20,11 @@ int main(void) {
     xcb_connection_t *connection = xcb_connect(NULL, NULL);
     
     // Check if we failed to establish a connection to the specified X server.
-    if (xcb_connection_has_error(connection))
-        return 1; // todo: actual error logging.
+    if (xcb_connection_has_error(connection)) {
+        // TODO: syslog possibly?
+        fputs("Failure to open display!", stderr);
+        return EXIT_FAILURE;
+    }
 
     const xcb_setup_t *setup = xcb_get_setup(connection); // Display environment properties.
     xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data; // First available screen.
@@ -70,8 +42,12 @@ int main(void) {
     xcb_change_window_attributes(connection, screen->root, XCB_CW_EVENT_MASK, mask);
     xcb_flush(connection);
 
-    signal(SIGTERM, stop_running);
+    // Attempt to set a SIGTERM handler (so we can gracefully exit).
+    if (signal(SIGTERM, stop_running) == SIG_ERR) {
+        fputs("failed to set SIGTERM handler.", stderr);
+        return EXIT_FAILURE;
+    }
 
     // Starts loop. Keeps WM running until killed.
-    start_loop();
+    start_loop(state);
 }
