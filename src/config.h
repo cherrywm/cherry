@@ -24,5 +24,5 @@
     const char* default_config_file_location(void);
 
     // Application exits if config file does not exist.
-    void assert_config_file_exists(const char *file_name);
+    void assert_config_file_exists(const char *file_location);
 #endif

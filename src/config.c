@@ -31,9 +31,9 @@ cherry_config_t* run_config_file(lua_State *lua_state, const char *file_location
 }
 
 // Exits application if the file does not exist.
-void assert_config_file_exists(const char *file_name) {
-    if (access(file_name, F_OK) == -1) {
-        fprintf(stderr, "config file: %s does not exist.\n", file_name);
+void assert_config_file_exists(const char *file_location) {
+    if (access(file_location, F_OK) == -1) {
+        fprintf(stderr, "config file: %s does not exist.\n", file_location);
         exit(EXIT_FAILURE);
     }
 }
