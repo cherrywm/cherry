@@ -1,6 +1,6 @@
 #include "config.h"
 
-cherry_config_t run_config_file(lua_State *lua_state, const char *file_name) {
+cherry_config_t* run_config_file(lua_State *lua_state, const char *file_name) {
     // If file_name is null, run again with default config file location
     if (!file_name)
         return run_config_file(lua_state, default_config_file_location());
@@ -27,7 +27,7 @@ cherry_config_t run_config_file(lua_State *lua_state, const char *file_name) {
     config->fifo_path = lua_isnoneornil(lua_state, -2) ? CHERRY_DEFAULT_FIFO_PATH : lua_tostring(lua_state, -2);
     config->desktop_count = lua_isnoneornil(lua_state, -1) ? 1 : lua_tonumber(lua_state, -1);
 
-    return *config;
+    return config;
 }
 
 // Exits application if the file does not exist.

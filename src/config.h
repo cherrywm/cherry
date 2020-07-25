@@ -18,7 +18,7 @@
     } cherry_config_t;
 
     // Assumes Lua has already been setup.
-    cherry_config_t run_config_file(lua_State *lua_state, const char *file_name);
+    cherry_config_t* run_config_file(lua_State *lua_state, const char *file_name);
 
     // Defaults to $XDG_CONFIG_HOME/cherry/cherry.lua, or $HOME/.config/cherry/cherry.lua
     const char* default_config_file_location(void);
