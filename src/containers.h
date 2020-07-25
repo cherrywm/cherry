@@ -7,10 +7,9 @@
     // A wrapper struct around an X Window.
     // Used as a linked list structure.
     typedef struct node_t {
-        desktop_t *desktop;
         xcb_window_t *window;
-        node_t *previous;
-        node_t *next;
+        struct node_t *previous;
+        struct node_t *next;
     } node_t;
 
     // Note that this refers to a single screen.
@@ -31,7 +30,7 @@
     // This, again, does not modify the layout in any way.
     // The node list will be modified though.
     // Automatically frees any memory allocated for the node.
-    void destroy_node(node_t* node);
+    void destroy_node(desktop_t *desktop, node_t* node);
 
     // Creates a desktop struct.
     desktop_t* create_desktop(cherry_state_t *state);
