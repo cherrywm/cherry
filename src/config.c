@@ -11,7 +11,7 @@ cherry_config_t run_config_file(lua_State *lua_state, const char *file_name) {
     // Loads Lua file, executes it. If there was an error, exit.
     int status = luaL_dofile(lua_state, file_name);
     if (status) {
-        fprintf(stderr, "error loading config file: %s", file_name);
+        fprintf(stderr, "error loading config file: %s | status: %d", file_name, status);
         exit(EXIT_FAILURE);
     }
 
