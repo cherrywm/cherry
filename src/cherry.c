@@ -46,8 +46,12 @@ int main(int argc, char *argv[]) {
 
     luaL_openlibs(lua_state);
 
-    struct cherry_state_t _state = { 1, connection, setup, screen, lua_state };
-    state = &_state;
+    // We're not going to be reading before writing, so malloc instead of calloc.
+    state = (cherry_state_t*) malloc(sizeof(cherry_state_t));
+    state->connection = connection;
+    state->screen = screen;
+    state->setup = setup;
+    state->lua_state = lua_state;
 
     uint32_t mask[1] = {
         XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |

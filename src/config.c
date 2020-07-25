@@ -21,13 +21,13 @@ cherry_config_t run_config_file(lua_State *lua_state, const char *file_name) {
 
     // Retrieve variables from Lua stack, create config object.
     // Note that in the case of missing data, defaults are provided.
-    struct cherry_config_t config = {
-        lua_state,
-        lua_isnoneornil(lua_state, -2) ? CHERRY_DEFAULT_FIFO_PATH : lua_tostring(lua_state, -2),
-        lua_isnoneornil(lua_state, -1) ? 1 : lua_tonumber(lua_state, -1)
-    };
 
-    return config;
+    cherry_config_t *config = (cherry_config_t*) malloc(sizeof(cherry_config_t));
+    config->lua_state = lua_state;
+    config->fifo_path = lua_isnoneornil(lua_state, -2) ? CHERRY_DEFAULT_FIFO_PATH : lua_tostring(lua_state, -2);
+    config->desktop_count = lua_isnoneornil(lua_state, -1) ? 1 : lua_tonumber(lua_state, -1);
+
+    return *config;
 }
 
 // Exits application if the file does not exist.

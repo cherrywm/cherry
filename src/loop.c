@@ -1,6 +1,6 @@
 #include "loop.h"
 
-const struct timespec delay = {0, 50000000L}; // Prevents the loop from consuming 100% of its respective core all the time.
+const struct timespec delay = {0, 50000000L};
 
 void start_loop(cherry_state_t *state) {
     state->keep_running = 1;
@@ -16,6 +16,10 @@ void start_loop(cherry_state_t *state) {
             }
         }
 
+        // Free the memory allocated for event struct.
+        free(ev);
+
+        // Add in a 0.05s sleep, so that this loop doesn't eat up all the CPU.
         nanosleep(&delay, NULL);
     } while (state->keep_running);
 
@@ -23,6 +27,9 @@ void start_loop(cherry_state_t *state) {
 
     // Close connection to X server.
     xcb_disconnect(state->connection);
+
+    // Free the memory allocated for the state struct.
+    free(state);
 
     // Exit with a successful status code.
     exit(0);
