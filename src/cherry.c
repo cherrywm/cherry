@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <signal.h>
-#include <unistd.h>
+#include <getopt.h>
 
 #include "loop.h"
 #include <lauxlib.h>
 #include <lualib.h>
+#include <string.h>
 
 // I immensely dislike storing global state :(
 static struct cherry_state_t *state;
@@ -14,7 +15,20 @@ void stop_running(int _unused) {
     (void)(_unused);
 }
 
-int main(void) {
+// Executed if no options are passed to cherry.
+// No --config/-c option makes cherry assume a config file location of $XDG_CONFIG_HOME/cherry/cherry.lua.
+void setup() {
+    // skeleton.
+}
+
+int main(int argc, char *argv[]) {
+    int option_index = getopt(argc, argv, "c:");
+    if (option_index == -1) {
+        exit(1); // skeleton.
+    }
+
+    getopt(argc, argv, "c::");
+
     // Establish connection to DISPLAY X server, first available screen.
     // TODO: Support multple monitors.
     xcb_connection_t *connection = xcb_connect(NULL, NULL);
@@ -29,6 +43,8 @@ int main(void) {
     const xcb_setup_t *setup = xcb_get_setup(connection); // Display environment properties.
     xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data; // First available screen.
     lua_State *lua_state = luaL_newstate(); // Lua state. Used for configuration and scripting.
+
+    luaL_openlibs(lua_state);
 
     struct cherry_state_t _state = { 1, connection, setup, screen, lua_state };
     state = &_state;

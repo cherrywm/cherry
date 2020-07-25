@@ -1,5 +1,6 @@
-#ifndef CHERRY_H
-    #define CHERRY_H
+#ifndef CHERRY_CHERRYH
+    #define CHERRY_CHERRYH
+
     #include <xcb/xcb.h>
     #include <lua.h>
 
