@@ -1,6 +1,6 @@
 #ifndef CHERRY_CONFIGH
     #define CHERRY_CONFIGH
-    #define CHERRY_DEFAULT_FIFO_PATH "/tmp/cherry"
+    #define CHERRY_DEFAULT_FIFO_LOCATION "/tmp/cherry"
 
     #include <stdio.h>
     #include <stdlib.h>

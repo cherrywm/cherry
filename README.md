@@ -20,7 +20,7 @@ By default, 🍒 will look in the location specified by the `-c` option. If no o
     * if not, default to: `$HOME/.config/cherry/cherry.lua`.
 
 🍒 listens not only for X events, but also for incoming events from a named pipe. By default, this pipe will be made
-at `/tmp/cherry` but can be configured with the `fifo_path` Lua variable.
+at `/tmp/cherry` but can be configured with the `fifo_location` Lua variable.
 
 Note that no checks are made over the pipe location. Please make sure that this is a valid location.
 

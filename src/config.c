@@ -16,7 +16,7 @@ cherry_config_t* run_config_file(lua_State *lua_state, const char *file_location
     }
 
     // Get global config variables.
-    lua_getglobal(lua_state, "fifo_path");
+    lua_getglobal(lua_state, "fifo_location");
     lua_getglobal(lua_state, "desktop_count");
 
     // Retrieve variables from Lua stack, create config object.
@@ -24,7 +24,7 @@ cherry_config_t* run_config_file(lua_State *lua_state, const char *file_location
 
     cherry_config_t *config = (cherry_config_t*) malloc(sizeof(cherry_config_t));
     config->lua_state = lua_state;
-    config->fifo_path = lua_isnoneornil(lua_state, -2) ? CHERRY_DEFAULT_FIFO_PATH : lua_tostring(lua_state, -2);
+    config->fifo_path = lua_isnoneornil(lua_state, -2) ? CHERRY_DEFAULT_FIFO_LOCATION : lua_tostring(lua_state, -2);
     config->desktop_count = lua_isnoneornil(lua_state, -1) ? 1 : lua_tonumber(lua_state, -1);
 
     return config;
