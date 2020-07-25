@@ -3,7 +3,8 @@
 #include <getopt.h>
 
 #include "loop.h"
-#include "config.h"
+#include "cherry.h"
+
 #include <lauxlib.h>
 #include <lualib.h>
 #include <string.h>
@@ -49,6 +50,7 @@ void setup(const char *config_file_location) {
     state->screen = screen;
     state->setup = setup;
     state->lua_state = lua_state;
+    state->config = config;
 
     // Starts loop. Keeps WM running until killed.
     start_loop(state);

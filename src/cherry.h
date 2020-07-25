@@ -3,6 +3,7 @@
 
     #include <xcb/xcb.h>
     #include <lua.h>
+    #include "config.h"
 
     // Cherry state struct.
     // One instance of this is created and referred to throughout cherry.
@@ -12,6 +13,7 @@
         const xcb_setup_t *setup;
         xcb_screen_t *screen;
         lua_State *lua_state;
+        cherry_config_t *config;
     } cherry_state_t;
 
     // Flips run check, so that the loop stops.
