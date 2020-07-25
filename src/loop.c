@@ -1,4 +1,5 @@
 #include "loop.h"
+#include "lua.h"
 
 const struct timespec delay = {0, 50000000L};
 
@@ -27,6 +28,9 @@ void start_loop(cherry_state_t *state) {
 
     // Close connection to X server.
     xcb_disconnect(state->connection);
+
+    // Close Lua.
+    lua_close(state->lua_state);
 
     // Free memory allocated for config struct.
     free(state->config);
