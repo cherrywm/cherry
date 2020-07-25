@@ -28,6 +28,9 @@ void start_loop(cherry_state_t *state) {
     // Close connection to X server.
     xcb_disconnect(state->connection);
 
+    // Free memory allocated for config struct.
+    free(state->config);
+
     // Free the memory allocated for the state struct.
     free(state);
 
