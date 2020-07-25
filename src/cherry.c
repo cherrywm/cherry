@@ -12,6 +12,7 @@
 // I immensely dislike storing global state :(
 static struct cherry_state_t *state;
 
+// Necessary for this function. ^
 void stop_running(int _unused) {
     state->keep_running = 0;
     (void)(_unused);
@@ -65,7 +66,6 @@ int main(int argc, char *argv[]) {
             config_file_location = optarg;
             break;
         case '?':
-            fputs("You must specify a file location for the -c option.", stderr);
             exit(EXIT_FAILURE); // No break; as this exits application already.
         default:
             config_file_location = default_config_file_location(); // No break; as this is the last case.
