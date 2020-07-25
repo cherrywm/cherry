@@ -1,4 +1,4 @@
-cherry: src/cherry.c
+cherry: src/cherry.c src/loop.c src/config.c
 	gcc src/cherry.c src/loop.c src/config.c -o cherry -lxcb -llua5.3 -Wall -Wextra
 
 xephyr:
