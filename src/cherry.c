@@ -42,7 +42,7 @@ void setup(const char *config_file_location) {
 
     if (signal(SIGTERM, stop_running) == SIG_ERR) {
         fputs("failed to set SIGTERM handler.", stderr);
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
     state = (cherry_state_t*) malloc(sizeof(cherry_state_t));
