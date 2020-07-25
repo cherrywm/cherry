@@ -20,5 +20,5 @@
 
     // Responsible for setting up cherry if all the preconditions are met.
     // This is effectively the true entry point of cherry.
-    void setup(void);
+    void setup(const char *config_file_location);
 #endif
