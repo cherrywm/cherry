@@ -1,24 +1,31 @@
 #include "loop.h"
-#include "lua.h"
 
 const struct timespec delay = {0, 50000000L};
 
 void start_loop(cherry_state_t *state) {
     state->keep_running = 1;
-    xcb_generic_event_t *ev;
+    xcb_generic_event_t *event;
 
     do {
-        if ((ev = xcb_poll_for_event(state->connection))) {
-            uint8_t response_type = ev->response_type & ~0x80;
+        if ((event = xcb_poll_for_event(state->connection))) {
+            uint8_t response_type = event->response_type & ~0x80;
 
             switch (response_type) {
+                case XCB_MAP_REQUEST:
+                    map_request(state, (xcb_map_request_event_t*) event);
+                    break;
+
+                case XCB_DESTROY_NOTIFY:
+                    destroy_notify((xcb_destroy_notify_event_t*) event);
+                    break;
+
                 default:
                     break; // Skeleton loop.
             }
         }
 
         // Free the memory allocated for event struct.
-        free(ev);
+        free(event);
 
         // Add in a 0.05s sleep, so that this loop doesn't eat up all the CPU.
         nanosleep(&delay, NULL);
