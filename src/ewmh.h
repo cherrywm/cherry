@@ -13,7 +13,7 @@
     // Allocates an xcb_ewmh_connection_t struct and inits atoms etc.
     // Returns NULL if there was an error.
     // This is not automatically freed.
-    xcb_ewmh_connection_t* ewmh_connection(xcb_connection_t *connection);
+    xcb_ewmh_connection_t* get_ewmh_connection(xcb_connection_t *connection);
 
     // Enables cherry to be compliant with the _NET_SUPPORTING_WM_CHECK part of the EWMH specification.
     // Returns a possibly-NULL error pointer.

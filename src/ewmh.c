@@ -10,7 +10,7 @@ xcb_window_t* create_child_window(xcb_connection_t *connection, xcb_window_t *ro
     return child_window;
 }
 
-xcb_ewmh_connection_t* ewmh_connection(xcb_connection_t *connection) {
+xcb_ewmh_connection_t* get_ewmh_connection(xcb_connection_t *connection) {
     xcb_ewmh_connection_t *ewmh_connection = (xcb_ewmh_connection_t *) malloc(sizeof(xcb_ewmh_connection_t));
     xcb_intern_atom_cookie_t *cookies = xcb_ewmh_init_atoms(connection, ewmh_connection);
 
