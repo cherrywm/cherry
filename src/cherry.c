@@ -19,7 +19,7 @@ void stop_running(int _unused) {
     (void)(_unused);
 }
 
-void setup_xcb(xcb_connection_t *connection, xcb_window_t root_window) {
+xcb_ewmh_connection_t* setup_xcb_ewmh(xcb_connection_t *connection, xcb_window_t root_window) {
     xcb_window_t child_window = create_child_window(connection, root_window);
     xcb_ewmh_connection_t *ewmh_connection = get_ewmh_connection(connection);
     xcb_generic_error_t *support_error = set_supporting_wm(connection, ewmh_connection, root_window, child_window);
@@ -47,6 +47,8 @@ void setup_xcb(xcb_connection_t *connection, xcb_window_t root_window) {
     }
 
     xcb_flush(connection);
+    
+    return ewmh_connection;
 }
 
 void setup(const char *config_file_location) {
@@ -63,7 +65,6 @@ void setup(const char *config_file_location) {
 
     const xcb_setup_t *setup = xcb_get_setup(connection);
     xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data;
-    setup_xcb(connection, screen->root);
 
     if (signal(SIGTERM, stop_running) == SIG_ERR) {
         fputs("failed to set SIGTERM handler.", stderr);
@@ -72,6 +73,7 @@ void setup(const char *config_file_location) {
 
     state = (cherry_state_t*) malloc(sizeof(cherry_state_t));
     state->connection = connection;
+    state->ewmh_connection = setup_xcb_ewmh(connection, screen->root);
     state->screen = screen;
     state->setup = setup;
     state->lua_state = lua_state;

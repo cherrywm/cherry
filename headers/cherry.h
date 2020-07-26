@@ -14,6 +14,7 @@
     typedef struct cherry_state_t {
         int keep_running;
         xcb_connection_t *connection;
+        xcb_ewmh_connection_t *ewmh_connection;
         const xcb_setup_t *setup;
         xcb_screen_t *screen;
         lua_State *lua_state;
@@ -28,6 +29,6 @@
     // This is effectively the true entry point of cherry.
     void setup(const char *config_file_location);
 
-    // Sets up XCB properly.
-    void setup_xcb(xcb_connection_t *connection, xcb_window_t root_window);
+    // Sets up XCB, EWMH and any other X stuff.
+    xcb_ewmh_connection_t* setup_xcb_ewmh(xcb_connection_t *connection, xcb_window_t root_window);
 #endif
