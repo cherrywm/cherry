@@ -1,5 +1,5 @@
-#ifndef CHERRY_NODEH
-    #define CHERRY_NODEH
+#ifndef CHERRY_NODE_H
+    #define CHERRY_NODE_H
 
     #include <xcb/xcb.h>
 
@@ -13,10 +13,7 @@
     // Creates a node from a window, but does not integrate it. A constructor.
     node_t* create_node(xcb_window_t *window);
 
-    // Destroys a node.
+    // Destroys a node and the window associated with it.
     // All memory is freed.
-    void destroy_node(node_t *node);
-
-    // Destroys the underlying X window, but doesn't free the node memory.
-    void destroy_window(xcb_connection_t *connection, node_t *node);
+    void destroy_node(xcb_connection_t *connection, node_t *node);
 #endif
