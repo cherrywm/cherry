@@ -43,6 +43,9 @@ void start_loop(cherry_state_t *state) {
     // Free memory allocated for config struct.
     free(state->config);
 
+    // Frees memory occupied by xcb_ewmh_connection_t struct.
+    free(state->ewmh_connection);
+
     // Free the memory allocated for the state struct.
     free(state);
 
