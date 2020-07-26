@@ -1,5 +1,5 @@
-#ifndef CHERRY_CONFIGH
-    #define CHERRY_CONFIGH
+#ifndef CHERRY_CONFIG_H
+    #define CHERRY_CONFIG_H
 
     #define CHERRY_DEFAULT_FIFO_LOCATION "/tmp/cherry"
     #define CHERRY_DEFAULT_DESKTOP_COUNT 1

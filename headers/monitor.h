@@ -1,5 +1,5 @@
-#ifndef CHERRY_MONITORH
-    #define CHERRY_MONITORH
+#ifndef CHERRY_MONITOR_H
+    #define CHERRY_MONITOR_H
     #include "cherry.h"
     #include "desktop.h"
 

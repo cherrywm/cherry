@@ -1,5 +1,5 @@
-#ifndef CHERRY_CHERRYH
-    #define CHERRY_CHERRYH
+#ifndef CHERRY_CHERRY_H
+    #define CHERRY_CHERRY_H
     #define WM_NAME "cherry"
 
     #include <xcb/xcb.h>
