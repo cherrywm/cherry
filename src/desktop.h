@@ -1,6 +1,8 @@
-#ifndef CHERRY_DESKTOPH
-    #define CHERRY_DESKTOPH
+#ifndef CHERRY_DESKTOP_H
+    #define CHERRY_DESKTOP_H
+
     #include "node.h"
+    #include <xcb/xcb.h>
 
     // Represents a single workspace, which can contain any number of nodes.
     // A single monitor can contain multiple desktops.
@@ -16,5 +18,5 @@
     desktop_t* create_desktop(void);
 
     // Destroys a desktop, closing and freeing any resources of the desktop and the nodes it contains.
-    void destroy_desktop(desktop_t *desktop);
+    void destroy_desktop(xcb_connection_t *connection, desktop_t *desktop);
 #endif

@@ -3,7 +3,7 @@
 
 void map_request(xcb_connection_t *connection, xcb_window_t *window) {
     node_t *node = create_node(window);
-    xcb_map_window(connection, window);
+    xcb_map_window(connection, *window);
     xcb_flush(connection);
     // Update containers.
 }

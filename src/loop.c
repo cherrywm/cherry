@@ -12,11 +12,12 @@ void start_loop(cherry_state_t *state) {
 
             switch (response_type) {
                 case XCB_MAP_REQUEST:
-                    map_request(state, (xcb_map_request_event_t*) event);
+                    map_request(state->connection, &((xcb_map_request_event_t *) event)->window);
                     break;
 
                 case XCB_DESTROY_NOTIFY:
-                    destroy_notify((xcb_destroy_notify_event_t*) event);
+                    // nothing right now
+                    // destroy_notify requires node_t, no system in place for it right now
                     break;
 
                 default:

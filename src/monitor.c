@@ -12,7 +12,7 @@ monitor_t* create_monitor(cherry_state_t *state) {
 
 void destroy_monitor(monitor_t *monitor) {
     for (desktop_t *desktop = monitor->head; desktop; desktop = desktop->next)
-        destroy_desktop(desktop);
+        destroy_desktop(monitor->state->connection, desktop);
     
     // We don't free the cherry state as it is used elsewhere outside the scope of window containers.
     free(monitor);

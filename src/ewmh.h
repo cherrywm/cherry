@@ -8,7 +8,7 @@
     // Creates a child/meta window.
     // This is used by cherry for a variety of internal reasons.
     // This is not mapped, and thus cannot be interacted with.
-    xcb_window_t* create_child_window(xcb_connection_t *connection, xcb_window_t *root);
+    xcb_window_t create_child_window(xcb_connection_t *connection, xcb_window_t root);
 
     // Allocates an xcb_ewmh_connection_t struct and inits atoms etc.
     // Returns NULL if there was an error.
@@ -19,15 +19,15 @@
     // Returns a possibly-NULL error pointer.
     // Note that this is synchronous, but is only called once.
     xcb_generic_error_t* set_supporting_wm(xcb_connection_t *connection, xcb_ewmh_connection_t *ewmh_connection,
-        xcb_window_t *root_window, xcb_window_t *child_window);
+        xcb_window_t root_window, xcb_window_t child_window);
 
     // Sets a window's name. Used in conjunction with set_supporting_wm.
     // Returns a possibly-NULL error pointer.
     xcb_generic_error_t* set_wm_name(xcb_connection_t *connection, xcb_ewmh_connection_t *ewmh_connection,
-        xcb_window_t *window, size_t length, const char* name);
+        xcb_window_t window, size_t length, const char* name);
 
     // Notifies X that we wish to intercept messages from every connected X client.
     // This is how all X window managers work.
     // Returns a possibly-NULL error pointer.
-    xcb_generic_error_t* substructure_redirect(xcb_connection_t *connection, xcb_window_t *window);
+    xcb_generic_error_t* substructure_redirect(xcb_connection_t *connection, xcb_window_t window);
 #endif

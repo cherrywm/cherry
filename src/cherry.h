@@ -29,5 +29,5 @@
     void setup(const char *config_file_location);
 
     // Sets up XCB properly.
-    void setup_xcb(xcb_connection_t *connection, xcb_window_t *root_window);
+    void setup_xcb(xcb_connection_t *connection, xcb_window_t root_window);
 #endif

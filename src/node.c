@@ -11,6 +11,6 @@ node_t *create_node(xcb_window_t *window) {
 }
 
 void destroy_node(xcb_connection_t *connection, node_t *node) {
-    xcb_destroy_window(connection, node->window);
+    xcb_destroy_window(connection, *node->window);
     free(node);
 }

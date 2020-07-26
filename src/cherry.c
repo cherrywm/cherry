@@ -19,8 +19,8 @@ void stop_running(int _unused) {
     (void)(_unused);
 }
 
-void setup_xcb(xcb_connection_t *connection, xcb_window_t *root_window) {
-    xcb_window_t *child_window = create_child_window(connection, root_window);
+void setup_xcb(xcb_connection_t *connection, xcb_window_t root_window) {
+    xcb_window_t child_window = create_child_window(connection, root_window);
     xcb_ewmh_connection_t *ewmh_connection = get_ewmh_connection(connection);
     xcb_generic_error_t *support_error = set_supporting_wm(connection, ewmh_connection, root_window, child_window);
 
@@ -63,7 +63,7 @@ void setup(const char *config_file_location) {
 
     const xcb_setup_t *setup = xcb_get_setup(connection);
     xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data;
-    setup_xcb(connection, screen);
+    setup_xcb(connection, screen->root);
 
     if (signal(SIGTERM, stop_running) == SIG_ERR) {
         fputs("failed to set SIGTERM handler.", stderr);
