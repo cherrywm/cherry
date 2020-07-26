@@ -4,6 +4,7 @@
 
 #include "loop.h"
 #include "cherry.h"
+#include "ewmh.h"
 
 #include <lauxlib.h>
 #include <lualib.h>
@@ -16,6 +17,36 @@ static struct cherry_state_t *state;
 void stop_running(int _unused) {
     state->keep_running = 0;
     (void)(_unused);
+}
+
+void setup_xcb(xcb_connection_t *connection, xcb_window_t *root_window) {
+    xcb_window_t *child_window = create_child_window(connection, root_window);
+    xcb_ewmh_connection_t *ewmh_connection = get_ewmh_connection(connection);
+    xcb_generic_error_t *support_error = set_supporting_wm(connection, ewmh_connection, root_window, child_window);
+
+    if (!support_error) {
+        fputs("Failed to initialize cherry!", stderr);
+        free(support_error);
+        exit(EXIT_FAILURE);
+    }
+    
+    xcb_generic_error_t *name_error = set_wm_name(connection, ewmh_connection, child_window, strlen(WM_NAME), WM_NAME);
+
+    if (!name_error) {
+        fputs("Failed to initialize cherry!", stderr);
+        free(name_error);
+        exit(EXIT_FAILURE);
+    }
+
+    xcb_generic_error_t *redirect_error = substructure_redirect(connection, root_window);
+
+    if (!redirect_error) {
+        fputs("Failed to initialize cherry!", stderr);
+        free(redirect_error);
+        exit(EXIT_FAILURE);
+    }
+
+    xcb_flush(connection);
 }
 
 void setup(const char *config_file_location) {
@@ -32,14 +63,7 @@ void setup(const char *config_file_location) {
 
     const xcb_setup_t *setup = xcb_get_setup(connection);
     xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data;
-    
-    uint32_t substructure_mask[1] = {
-        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
-        XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY
-    };
-
-    xcb_change_window_attributes(connection, screen->root, XCB_CW_EVENT_MASK, substructure_mask);
-    xcb_flush(connection);
+    setup_xcb(connection, screen);
 
     if (signal(SIGTERM, stop_running) == SIG_ERR) {
         fputs("failed to set SIGTERM handler.", stderr);

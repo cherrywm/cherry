@@ -1,7 +1,11 @@
 #ifndef CHERRY_CHERRYH
     #define CHERRY_CHERRYH
+    #define WM_NAME "cherry"
 
     #include <xcb/xcb.h>
+    #include <xcb/xcb_atom.h>
+    #include <xcb/xcb_ewmh.h>
+    
     #include <lua.h>
     #include "config.h"
 
@@ -23,4 +27,7 @@
     // Responsible for setting up cherry if all the preconditions are met.
     // This is effectively the true entry point of cherry.
     void setup(const char *config_file_location);
+
+    // Sets up XCB properly.
+    void setup_xcb(xcb_connection_t *connection, xcb_window_t *root_window);
 #endif

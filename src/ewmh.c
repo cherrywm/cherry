@@ -35,3 +35,15 @@ xcb_generic_error_t* set_wm_name(xcb_connection_t *connection, xcb_ewmh_connecti
     xcb_void_cookie_t cookie = xcb_ewmh_set_wm_name_checked(ewmh_connection, window, length, name);
     return xcb_request_check(connection, cookie);
 }
+
+xcb_generic_error_t* substructure_redirect(xcb_connection_t *connection, xcb_window_t *window) {
+    uint32_t substructure_mask[] = {
+        XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |
+        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT
+    };
+
+    xcb_void_cookie_t cookie =
+        xcb_change_window_attributes_checked(connection, window, XCB_CW_EVENT_MASK, substructure_mask);
+
+    return xcb_request_check(connection, cookie);
+}

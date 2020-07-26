@@ -25,4 +25,9 @@
     // Returns a possibly-NULL error pointer.
     xcb_generic_error_t* set_wm_name(xcb_connection_t *connection, xcb_ewmh_connection_t *ewmh_connection,
         xcb_window_t *window, size_t length, const char* name);
+
+    // Notifies X that we wish to intercept messages from every connected X client.
+    // This is how all X window managers work.
+    // Returns a possibly-NULL error pointer.
+    xcb_generic_error_t* substructure_redirect(xcb_connection_t *connection, xcb_window_t *window);
 #endif
