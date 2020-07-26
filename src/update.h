@@ -1,12 +1,10 @@
-#ifndef CHERRY_UPDATEH
+#ifndef CHERRY_UPDATE_H
     #define CHERRY_UPDATE_H
 
     #include <xcb/xcb.h>
     #include "node.h"
-    #include "desktop.h"
-    #include "cherry.h"
 
-    void update_desktop(desktop_t *desktop);
-    void map_request(cherry_state_t *state, xcb_map_request_event_t *request_event);
-    void destroy_notify(xcb_destroy_notify_event_t *destroy_notify_event);
+    void map_request(xcb_connection_t *connection, xcb_window_t *window);
+
+    void destroy_notify(xcb_connection_t *connection, node_t *node);
 #endif
