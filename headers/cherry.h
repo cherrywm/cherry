@@ -1,6 +1,6 @@
 #ifndef CHERRY_CHERRY_H
     #define CHERRY_CHERRY_H
-    #define WM_NAME "cherry"
+    #define WM_NAME "🍒"
 
     #include <xcb/xcb.h>
     #include <xcb/xcb_ewmh.h>
