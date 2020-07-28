@@ -33,7 +33,7 @@
     tag_t* create_tag(const char *name);
 
     // Creates a node_t struct.
-    node_t* create_node(tag_t *tag, xcb_connection_t *connection);
+    node_t* create_node(tag_t *tag, xcb_window_t *window);
 
     // Creates a desktop_t struct.
     desktop_t* create_desktop(void);
