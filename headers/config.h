@@ -10,34 +10,22 @@
     #define CHERRY_DEFAULT_RIGHT_PADDING 10
     #define CHERRY_DEFAULT_LEFT_PADDING 10
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <unistd.h>
-
-    #include <lua.h>
-    #include <lualib.h>
-    #include <lauxlib.h>
-
-    typedef struct cherry_config_t {
-        lua_State *lua_state;
-        const char *fifo_path;
-        int desktop_count;
-        int border_width;
-        int window_gap;
-        int top_padding;
-        int bottom_padding;
-        int right_padding;
-        int left_padding;
-    } cherry_config_t;
+    extern const char *fifo_path;
+    extern int desktop_count;
+    extern int border_width;
+    extern int window_gap;
+    extern int top_padding;
+    extern int bottom_padding;
+    extern int right_padding;
+    extern int left_padding;
 
     // Assumes Lua has already been setup.
-    cherry_config_t* run_config_file(lua_State *lua_state, const char *file_location);
+    void run_config_file(const char *file_location);
 
     // Helper functions.
-    int int_from_config(lua_State *lua_state, const char *key, int default_value);
-    int boolean_from_config(lua_State *lua_state, const char *key, int default_value);
-    const char* string_from_config(lua_State *lua_state, const char *key, const char *default_value);
+    int int_from_config(const char *key, int default_value);
+    int boolean_from_config(const char *key, int default_value);
+    const char* string_from_config(const char *key, const char *default_value);
 
     // Defaults to $XDG_CONFIG_HOME/cherry/cherry.lua, or $HOME/.config/cherry/cherry.lua
     const char* default_config_file_location(void);

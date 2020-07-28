@@ -1,5 +1,8 @@
-#include "containers.h"
 #include <stdlib.h>
+#include "containers.h"
+#include "cherry.h"
+
+node_t *head;
 
 tag_t* create_tag(const char *name) {
     tag_t *tag = (tag_t *) malloc(sizeof(tag_t));
@@ -9,9 +12,9 @@ tag_t* create_tag(const char *name) {
     return tag;
 }
 
-node_t* create_node(tag_t *tag, xcb_connection_t *connection) {
+node_t* create_node(tag_t *tag, xcb_window_t *window) {
     node_t *node = (node_t *) malloc(sizeof(node_t));
-    node->connection = connection;
+    node->window = window;
     node->tag = tag;
     node->next = NULL;
 

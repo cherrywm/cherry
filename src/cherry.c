@@ -1,62 +1,62 @@
 #include <stdio.h>
+#include <string.h>
 #include <signal.h>
 #include <getopt.h>
-
-#include "loop.h"
-#include "cherry.h"
-#include "ewmh.h"
-
 #include <lauxlib.h>
 #include <lualib.h>
-#include <string.h>
 
-// I immensely dislike storing global state :(
-static struct cherry_state_t *state;
+#include "cherry.h"
+#include "config.h"
+#include "update.h"
+#include "ewmh.h"
 
-// Necessary for this function. ^
 void stop_running(int _unused) {
-    state->keep_running = 0;
+    keep_running = 0;
     (void)(_unused);
 }
 
-xcb_ewmh_connection_t* setup_xcb_ewmh(xcb_connection_t *connection, xcb_window_t root_window) {
-    xcb_window_t child_window = create_child_window(connection, root_window);
-    xcb_ewmh_connection_t *ewmh_connection = get_ewmh_connection(connection);
-    xcb_generic_error_t *support_error = set_supporting_wm(connection, ewmh_connection, root_window, child_window);
+int keep_running;
+xcb_connection_t *connection;
+xcb_ewmh_connection_t *ewmh_connection;
+xcb_screen_t *screen;
+lua_State *lua_state;
 
-    if (!support_error) {
-        fputs("Failed to initialize cherry!", stderr);
+void setup_xcb_ewmh(void) {
+    ewmh_connection = get_ewmh_connection();
+    xcb_window_t root_window = screen->root;
+    xcb_window_t child_window = create_child_window(&root_window);
+    xcb_generic_error_t *support_error = set_supporting_wm(&root_window, &child_window);
+
+    if (support_error) {
+        fprintf(stderr, "Failed to set supporting WM check! (%d)", support_error->error_code);
         free(support_error);
         exit(EXIT_FAILURE);
     }
     
-    xcb_generic_error_t *name_error = set_wm_name(connection, ewmh_connection, child_window, strlen(WM_NAME), WM_NAME);
+    xcb_generic_error_t *name_error = set_wm_name(&child_window, strlen(WM_NAME), WM_NAME);
 
-    if (!name_error) {
-        fputs("Failed to initialize cherry!", stderr);
+    if (name_error) {
+        fprintf(stderr, "Failed to set WM name/supp check! (%d)", name_error->error_code);
         free(name_error);
         exit(EXIT_FAILURE);
     }
 
-    xcb_generic_error_t *redirect_error = substructure_redirect(connection, root_window);
+    xcb_generic_error_t *redirect_error = substructure_redirect(&root_window);
 
-    if (!redirect_error) {
-        fputs("Failed to initialize cherry!", stderr);
+    if (redirect_error) {
+        fprintf(stderr, "Failed to set substructure redirect! (%d)", redirect_error->error_code);
         free(redirect_error);
         exit(EXIT_FAILURE);
     }
 
     xcb_flush(connection);
-    
-    return ewmh_connection;
 }
 
 void setup(const char *config_file_location) {
-    lua_State *lua_state = luaL_newstate();
+    lua_state = luaL_newstate();
     luaL_openlibs(lua_state);
-
-    cherry_config_t *config = run_config_file(lua_state, config_file_location);
-    xcb_connection_t *connection = xcb_connect(NULL, NULL);
+    run_config_file(config_file_location);
+    connection = xcb_connect(NULL, NULL);
 
     if (xcb_connection_has_error(connection)) {
         fputs("Failed to connect to X.", stderr);
@@ -64,23 +64,15 @@ void setup(const char *config_file_location) {
     }
 
     const xcb_setup_t *setup = xcb_get_setup(connection);
-    xcb_screen_t *screen = xcb_setup_roots_iterator(setup).data;
+    screen = xcb_setup_roots_iterator(setup).data;
 
     if (signal(SIGTERM, stop_running) == SIG_ERR) {
         fputs("failed to set SIGTERM handler.", stderr);
         exit(EXIT_FAILURE);
     }
 
-    state = (cherry_state_t*) malloc(sizeof(cherry_state_t));
-    state->connection = connection;
-    state->ewmh_connection = setup_xcb_ewmh(connection, screen->root);
-    state->screen = screen;
-    state->setup = setup;
-    state->lua_state = lua_state;
-    state->config = config;
-
-    // Starts loop. Keeps WM running until killed.
-    start_loop(state);
+    setup_xcb_ewmh();
+    start_loop();
 }
 
 int main(int argc, char *argv[]) {
@@ -91,10 +83,12 @@ int main(int argc, char *argv[]) {
         case 'c':
             config_file_location = optarg;
             break;
+
         case '?':
-            exit(EXIT_FAILURE); // No break; as this exits application already.
+            exit(EXIT_FAILURE);
+
         default:
-            config_file_location = default_config_file_location(); // No break; as this is the last case.
+            config_file_location = default_config_file_location();
     };
 
     setup(config_file_location);

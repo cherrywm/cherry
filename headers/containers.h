@@ -15,7 +15,7 @@
     // Wrapper around a window.
     typedef struct node_t {
         struct node_t *next;
-        xcb_connection_t *connection;
+        xcb_window_t *window;
         tag_t *tag; // TODO: multiple tag support?
     } node_t;
 
