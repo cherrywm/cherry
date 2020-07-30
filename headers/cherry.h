@@ -7,6 +7,7 @@
     #include <lua.h>
 
     extern int keep_running;
+    extern int fifo_file_descriptor;
     extern xcb_connection_t *connection;
     extern xcb_ewmh_connection_t *ewmh_connection;
     extern xcb_screen_t *screen;

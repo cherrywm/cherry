@@ -4,6 +4,8 @@
 #include <getopt.h>
 #include <lauxlib.h>
 #include <lualib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "cherry.h"
 #include "config.h"
@@ -16,6 +18,7 @@ void stop_running(int _unused) {
 }
 
 int keep_running;
+int fifo_file_descriptor;
 xcb_connection_t *connection;
 xcb_ewmh_connection_t *ewmh_connection;
 xcb_screen_t *screen;
@@ -70,6 +73,9 @@ void setup(const char *config_file_location) {
         fputs("failed to set SIGTERM handler.", stderr);
         exit(EXIT_FAILURE);
     }
+
+    unlink(fifo_path);
+    fifo_file_descriptor = open(fifo_path, O_RDONLY, O_NONBLOCK);
 
     setup_xcb_ewmh();
     start_loop();
