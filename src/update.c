@@ -1,11 +1,17 @@
 #include "update.h"
 #include "cherry.h"
+#include "config.h"
+
 #include <time.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 
 struct timespec delay = {0, 50000000L};
 
 void start_loop() {
     keep_running = 1;
+    uint32_t bytes_read;
 
     do {
         xcb_generic_event_t *event = xcb_poll_for_event(connection);
@@ -25,6 +31,17 @@ void start_loop() {
                     break;
             }
             free(event);
+        }
+
+        char buffer[CHERRY_BUFFER_SIZE + 1];
+
+        if ((bytes_read = read(fifo_file_descriptor, buffer, CHERRY_BUFFER_SIZE))) {
+            buffer[bytes_read + 1] = '\0';
+            
+            if (!strcmp(buffer, CHERRY_RELOAD_CONFIG)) {
+                printf("Reloading configuration file: %s", config_file_location);
+                run_config_file(config_file_location);
+            }
         }
 
         nanosleep(&delay, NULL);
