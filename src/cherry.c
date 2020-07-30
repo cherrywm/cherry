@@ -19,6 +19,7 @@ void stop_running(int _unused) {
 
 int keep_running;
 int fifo_file_descriptor;
+const char *config_file_location;
 xcb_connection_t *connection;
 xcb_ewmh_connection_t *ewmh_connection;
 xcb_screen_t *screen;
@@ -55,7 +56,7 @@ void setup_xcb_ewmh(void) {
     xcb_flush(connection);
 }
 
-void setup(const char *config_file_location) {
+void setup(void) {
     lua_state = luaL_newstate();
     luaL_openlibs(lua_state);
     run_config_file(config_file_location);
@@ -83,7 +84,6 @@ void setup(const char *config_file_location) {
 
 int main(int argc, char *argv[]) {
     int option = getopt(argc, argv, "c:");
-    const char *config_file_location;
 
     switch (option) {
         case 'c':
@@ -97,5 +97,5 @@ int main(int argc, char *argv[]) {
             config_file_location = default_config_file_location();
     };
 
-    setup(config_file_location);
+    setup();
 }

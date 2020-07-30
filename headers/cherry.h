@@ -8,6 +8,7 @@
 
     extern int keep_running;
     extern int fifo_file_descriptor;
+    extern const char *config_file_location;
     extern xcb_connection_t *connection;
     extern xcb_ewmh_connection_t *ewmh_connection;
     extern xcb_screen_t *screen;
@@ -19,7 +20,7 @@
 
     // Responsible for setting up cherry if all the preconditions are met.
     // This is effectively the true entry point of cherry.
-    void setup(const char *config_file_location);
+    void setup(void);
 
     // Sets up XCB, EWMH and any other X stuff.
     void setup_xcb_ewmh(void);
