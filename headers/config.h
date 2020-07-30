@@ -20,7 +20,7 @@
     extern int left_padding;
 
     // Assumes Lua has already been setup.
-    void run_config_file(const char *file_location);
+    void run_config_file(void);
 
     // Helper functions.
     int int_from_config(const char *key, int default_value);
@@ -28,7 +28,4 @@
 
     // Defaults to $XDG_CONFIG_HOME/cherry/cherry.lua, or $HOME/.config/cherry/cherry.lua
     const char* default_config_file_location(void);
-
-    // Application exits if config file does not exist.
-    void assert_config_file_exists(const char *file_location);
 #endif

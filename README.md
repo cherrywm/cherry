@@ -7,15 +7,15 @@ written in C, using [XCB](https://xcb.freedesktop.org/) and [Lua 5.3](https://ww
 [berry](https://github.com/JLErvin/berry) for the name.
 
 ## Configuration
-Note: 🍒 **requires** an existing configuration file. The simplest possible one you can have is just an empty file,
-as sensible defaults are provided for all options.
+All configuration is done through a configuration file, or the named pipe (discussed below).
+A configuration file is not needed. Sensible defaults will be provided in the absence of one.
 
 By default, 🍒 will look in the location specified by the `-c` option. If no option is provided, 🍒 will:
 * check if the `XDG_CONFIG_HOME` environment variable exists.
     * if so, the resulting location will be: `$XDG_CONFIG_HOME/cherry/cherry.lua`.
     * if not, default to: `$HOME/.config/cherry/cherry.lua`.
 
-🍒 will attempt to create a named FIFO pipe at the location specified by `fifo_path`, which defaults to `/tmp/cherry`.
+🍒 will attempt to create a named FIFO pipe at the location specified by the config variable `fifo_path`, which defaults to `/tmp/cherry`.
 
 If you echo `r` to it, 🍒 will reload the configuration file. Something like: `echo r > /tmp/cherry` will do, provided the path wasn't changed.
 

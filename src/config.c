@@ -14,46 +14,58 @@ int top_padding;
 int bottom_padding;
 int right_padding;
 int left_padding;
+int file_exists;
 
-void run_config_file(const char *file_location) {
-    if (!file_location) {
-        run_config_file(default_config_file_location());
+void run_config_file(void) {
+    file_exists = access(config_file_location, F_OK) == 0;
+    
+    if (file_exists) {
+        printf("Loading configuration file: %s\n", config_file_location);
+        int status = luaL_dofile(lua_state, config_file_location);
+
+        if (status) {
+            fprintf(stderr, "Error loading config file: %s | Status: %d\n", config_file_location, status);
+            exit(EXIT_FAILURE);
+        }
+
+        fifo_path = string_from_config("fifo_path", CHERRY_DEFAULT_FIFO_LOCATION);
+        desktop_count = int_from_config("desktop_count", CHERRY_DEFAULT_DESKTOP_COUNT);
+        border_width = int_from_config("border_width", CHERRY_DEFAULT_BORDER_WIDTH);
+        window_gap = int_from_config("window_gap", CHERRY_DEFAULT_WINDOW_GAP);
+        top_padding = int_from_config("top_padding", CHERRY_DEFAULT_TOP_PADDING);
+        bottom_padding = int_from_config("bottom_padding", CHERRY_DEFAULT_BOTTOM_PADDING);
+        right_padding = int_from_config("right_padding", CHERRY_DEFAULT_RIGHT_PADDING);
+        left_padding = int_from_config("left_padding", CHERRY_DEFAULT_LEFT_PADDING);
+        
         return;
     }
 
-    assert_config_file_exists(file_location);
-    int status = luaL_dofile(lua_state, file_location);
-    
-    if (status) {
-        fprintf(stderr, "error loading config file: %s | status: %d\n", file_location, status);
-        exit(EXIT_FAILURE);
-    }
+    puts("No configuration file specified. Using defaults.");
 
-    fifo_path = string_from_config("fifo_path", CHERRY_DEFAULT_FIFO_LOCATION);
-    desktop_count = int_from_config("desktop_count", CHERRY_DEFAULT_DESKTOP_COUNT);
-    border_width = int_from_config("border_width", CHERRY_DEFAULT_BORDER_WIDTH);
-    window_gap = int_from_config("window_gap", CHERRY_DEFAULT_WINDOW_GAP);
-    top_padding = int_from_config("top_padding", CHERRY_DEFAULT_TOP_PADDING);
-    bottom_padding = int_from_config("bottom_padding", CHERRY_DEFAULT_BOTTOM_PADDING);
-    right_padding = int_from_config("right_padding", CHERRY_DEFAULT_RIGHT_PADDING);
-    left_padding = int_from_config("left_padding", CHERRY_DEFAULT_LEFT_PADDING);
+    fifo_path = CHERRY_DEFAULT_FIFO_LOCATION;
+    desktop_count = CHERRY_DEFAULT_DESKTOP_COUNT;
+    border_width = CHERRY_DEFAULT_BORDER_WIDTH;
+    window_gap = CHERRY_DEFAULT_WINDOW_GAP;
+    top_padding = CHERRY_DEFAULT_TOP_PADDING;
+    bottom_padding = CHERRY_DEFAULT_BOTTOM_PADDING;
+    right_padding = CHERRY_DEFAULT_RIGHT_PADDING;
+    left_padding = CHERRY_DEFAULT_LEFT_PADDING;
 }
 
 int int_from_config(const char *key, int default_value) {
+    if (!file_exists)
+        return default_value;
+
     lua_getglobal(lua_state, key);
     return lua_isnoneornil(lua_state, -1) ? default_value : lua_tonumber(lua_state, -1);
 }
 
 const char* string_from_config(const char *key, const char *default_value) {
+    if (!file_exists)
+        return default_value;
+
     lua_getglobal(lua_state, key);
     return lua_isnoneornil(lua_state, -1) ? default_value : lua_tostring(lua_state, -1);
-}
-
-void assert_config_file_exists(const char *file_location) {
-    if (access(file_location, F_OK) == -1) {
-        fprintf(stderr, "config file: %s does not exist.\n", file_location);
-        exit(EXIT_FAILURE);
-    }
 }
 
 const char* default_config_file_location(void) {
