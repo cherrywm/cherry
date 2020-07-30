@@ -44,11 +44,6 @@ int int_from_config(const char *key, int default_value) {
     return lua_isnoneornil(lua_state, -1) ? default_value : lua_tonumber(lua_state, -1);
 }
 
-int boolean_from_config(const char *key, int default_value) {
-    lua_getglobal(lua_state, key);
-    return lua_isnoneornil(lua_state, -1) ? default_value : lua_toboolean(lua_state, -1);
-}
-
 const char* string_from_config(const char *key, const char *default_value) {
     lua_getglobal(lua_state, key);
     return lua_isnoneornil(lua_state, -1) ? default_value : lua_tostring(lua_state, -1);

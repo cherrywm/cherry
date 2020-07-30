@@ -24,7 +24,6 @@
 
     // Helper functions.
     int int_from_config(const char *key, int default_value);
-    int boolean_from_config(const char *key, int default_value);
     const char* string_from_config(const char *key, const char *default_value);
 
     // Defaults to $XDG_CONFIG_HOME/cherry/cherry.lua, or $HOME/.config/cherry/cherry.lua
