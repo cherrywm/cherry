@@ -39,7 +39,7 @@ void start_loop() {
             buffer[bytes_read + 1] = '\0';
             
             if (!strcmp(buffer, CHERRY_RELOAD_CONFIG)) {
-                printf("Reloading configuration file: %s", config_file_location);
+                printf("Reloading configuration file: %s\n", config_file_location);
                 run_config_file(config_file_location);
             }
         }
