@@ -1,5 +1,5 @@
 -- Note: These values all have defaults. For most users, an empty configuration file will do.
-fifo_location = "/tmp/cherry"
+fifo_path = "/tmp/cherry"
 desktop_count = 1
 border_width = 1
 window_gap = 20
@@ -12,4 +12,4 @@ left_padding = 10
 -- Later versions of cherry will provide an API, so that cherry extensions can be written.
 print("Hello, world!")
 
-print("The value of fifo_location is: " .. fifo_location)
+print("The value of fifo_path is: " .. fifo_path)
