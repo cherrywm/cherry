@@ -29,6 +29,7 @@ void run_config_file(const char *file_location) {
         exit(EXIT_FAILURE);
     }
 
+    fifo_path = string_from_config("fifo_path", CHERRY_DEFAULT_FIFO_LOCATION);
     desktop_count = int_from_config("desktop_count", CHERRY_DEFAULT_DESKTOP_COUNT);
     border_width = int_from_config("border_width", CHERRY_DEFAULT_BORDER_WIDTH);
     window_gap = int_from_config("window_gap", CHERRY_DEFAULT_WINDOW_GAP);
