@@ -38,7 +38,7 @@ void start_loop() {
         if ((bytes_read = read(fifo_file_descriptor, buffer, CHERRY_BUFFER_SIZE))) {
             buffer[bytes_read + 1] = '\0';
             
-            if (!strcmp(buffer, CHERRY_RELOAD_CONFIG)) {
+            if (strcmp(buffer, CHERRY_RELOAD_CONFIG) == 0) {
                 printf("Reloading configuration file: %s\n", config_file_location);
                 run_config_file(config_file_location);
             }
