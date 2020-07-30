@@ -47,11 +47,11 @@ void setup_xcb_ewmh(void) {
         exit(EXIT_FAILURE);
     }
 
-    xcb_generic_error_t *redirect_error = substructure_redirect(&root_window);
+    xcb_generic_error_t *init_error = send_event_init_mask(&root_window);
 
-    if (redirect_error) {
-        fprintf(stderr, "Failed to set substructure redirect! (%d)", redirect_error->error_code);
-        free(redirect_error);
+    if (init_error) {
+        fprintf(stderr, "Failed to initialize cherry! (%d)", init_error->error_code);
+        free(init_error);
         exit(EXIT_FAILURE);
     }
 

@@ -33,14 +33,17 @@ xcb_generic_error_t* set_wm_name(xcb_window_t *window, size_t length, const char
     return xcb_request_check(connection, cookie);
 }
 
-xcb_generic_error_t* substructure_redirect(xcb_window_t *window) {
-    uint32_t substructure_mask[] = {
+xcb_generic_error_t* send_event_init_mask(xcb_window_t *window) {
+    uint32_t mask[] = {
         XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |
-        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT
+        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
+        XCB_EVENT_MASK_BUTTON_1_MOTION |
+        XCB_EVENT_MASK_ENTER_WINDOW |
+        XCB_EVENT_MASK_LEAVE_WINDOW
     };
 
     xcb_void_cookie_t cookie =
-        xcb_change_window_attributes_checked(connection, *window, XCB_CW_EVENT_MASK, substructure_mask);
+        xcb_change_window_attributes_checked(connection, *window, XCB_CW_EVENT_MASK, mask);
 
     return xcb_request_check(connection, cookie);
 }
