@@ -61,7 +61,7 @@ void setup_xcb_ewmh(void) {
 void setup(void) {
     lua_state = luaL_newstate();
     luaL_openlibs(lua_state);
-    run_config_file(config_file_location);
+    run_config_file();
     connection = xcb_connect(NULL, NULL);
 
     if (xcb_connection_has_error(connection)) {
