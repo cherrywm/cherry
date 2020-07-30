@@ -6,6 +6,7 @@
 #include <lualib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 #include "cherry.h"
 #include "config.h"
@@ -76,6 +77,7 @@ void setup(void) {
     }
 
     unlink(fifo_path);
+    mkfifo(fifo_path, 0666);
     fifo_file_descriptor = open(fifo_path, O_RDONLY, O_NONBLOCK);
 
     setup_xcb_ewmh();
