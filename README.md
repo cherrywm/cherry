@@ -15,10 +15,9 @@ By default, 🍒 will look in the location specified by the `-c` option. If no o
     * if so, the resulting location will be: `$XDG_CONFIG_HOME/cherry/cherry.lua`.
     * if not, default to: `$HOME/.config/cherry/cherry.lua`.
 
-🍒 listens not only for X events, but also for incoming events from a named pipe. By default, this pipe will be made
-at `/tmp/cherry` but can be configured with the `fifo_location` Lua variable.
+🍒 will attempt to create a named FIFO pipe at the location specified by `fifo_path`, which defaults to `/tmp/cherry`.
 
-Note that no checks are made over the pipe location. Please make sure that this is a valid location.
+If you echo `r` to it, 🍒 will reload the configuration file. Something like: `echo r > /tmp/cherry` will do, provided the path wasn't changed.
 
 ## Development Details
 Compiling 🍒 yourself is as easy as installing Lua 5.3 and XCB, cloning the repository, then running `make`.
