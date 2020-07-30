@@ -3,10 +3,10 @@ fifo_path = "/tmp/cherry"
 desktop_count = 1
 border_width = 1
 window_gap = 20
-top_padding = 10
-bottom_padding = 10
-right_padding = 10
-left_padding = 10
+top_padding = 1
+bottom_padding = 1
+right_padding = 1
+left_padding = 1
 
 -- This is a Lua script! We can take full advantage of Lua here.
 -- Later versions of cherry will provide an API, so that cherry extensions can be written.
