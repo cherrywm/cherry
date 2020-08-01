@@ -1,27 +1,30 @@
 #include "update.h"
 #include "cherry.h"
 #include "config.h"
+#include "ewmh.h"
 
 #include <time.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdio.h> // remove after finished draft
 #include <string.h>
 
 struct timespec delay = {0, 50000000L};
 
 void start_loop() {
     keep_running = 1;
-    uint32_t bytes_read;
+    int bytes_read;
+    char buffer[CHERRY_BUFFER_SIZE];
 
     do {
         xcb_generic_event_t *event = xcb_poll_for_event(connection);
-
+        
         if (event) {
             uint8_t response_type = event->response_type & ~0x80;
             switch (response_type) {
-                case XCB_MAP_REQUEST:
+                case XCB_MAP_REQUEST: ;
+                    xcb_map_request_event_t *map_event = (xcb_map_request_event_t *) event;
                     // replace NULL with actual tags later.
-                    map_request(NULL, &((xcb_map_request_event_t *) event)->window);
+                    map_request(NULL, &map_event->window);
                     break;
 
                 case XCB_DESTROY_NOTIFY:
@@ -30,16 +33,23 @@ void start_loop() {
                 default:
                     break;
             }
+
             free(event);
         }
 
-        char buffer[CHERRY_BUFFER_SIZE + 1];
-
         if ((bytes_read = read(fifo_file_descriptor, buffer, CHERRY_BUFFER_SIZE))) {
-            buffer[bytes_read + 1] = '\0';
-            
-            if (strcmp(buffer, CHERRY_RELOAD_CONFIG) == 0)
-                run_config_file();
+            for (int index = 0; index < bytes_read; index++) {
+                if (buffer[index] == 'r') {
+                    run_config_file();
+                } else if (buffer[index] == 't') {
+                    int _i;
+                    for (_i = index + 2; _i < bytes_read && buffer[_i]; _i++);
+                    char tag[_i - index + 2];
+
+                    memcpy(tag, buffer + index + 2, sizeof(tag));
+                    create_tag(tag);
+                }
+            }
         }
 
         nanosleep(&delay, NULL);

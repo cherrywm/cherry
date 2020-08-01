@@ -10,8 +10,9 @@ $(TARGET): $(SRC)
 xephyr:
 	Xephyr -br -ac -noreset -screen 1920x1080 :1 &
 
-kill_xephyr:
-	killall Xephyr
+.PHONY: cherryc
+cherryc: src/cherryc.c
+	$(CC) src/cherryc.c -o cherryc -Wall -Wextra -pedantic -Iheaders
 
 test:
 	DISPLAY=:1 ./cherry

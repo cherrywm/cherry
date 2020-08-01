@@ -17,8 +17,17 @@ By default, 🍒 will look in the location specified by the `-c` option. If no o
 
 🍒 will attempt to create a named FIFO pipe at the location specified by the config variable `fifo_path`, which defaults to `/tmp/cherry`.
 
-If you echo `r` to it, 🍒 will reload the configuration file. Something like: `echo r > /tmp/cherry` will do, provided the path wasn't changed.
+Communication over this pipe can be done with `cherryc`. As of August 1 2020, you can use `cherryc` to:
+* reload the configuration file: `-r`
+* create new tags/switch to a pre-existing tag: `-t`
+* specify a custom pipe location: `-f`
+
+An example usage, combining all options, would be `cherryc -rtexample -f/tmp/example`. `cherryc` configuration does not persist.
 
 ## Development Details
 Compiling 🍒 yourself is as easy as installing Lua 5.3 and XCB, cloning the repository, then running `make`.
 Due to how tiny the 🍒 codebase is, full compilation should only take a few seconds at most.
+
+`cherryc` can be compiled with `make cherryc`.
+
+

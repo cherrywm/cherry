@@ -36,10 +36,7 @@ xcb_generic_error_t* set_wm_name(xcb_window_t *window, size_t length, const char
 xcb_generic_error_t* send_event_init_mask(xcb_window_t *window) {
     uint32_t mask[] = {
         XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |
-        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
-        XCB_EVENT_MASK_BUTTON_1_MOTION |
-        XCB_EVENT_MASK_ENTER_WINDOW |
-        XCB_EVENT_MASK_LEAVE_WINDOW
+        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT
     };
 
     xcb_void_cookie_t cookie =

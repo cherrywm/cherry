@@ -1,8 +1,7 @@
 #ifndef CHERRY_UPDATE_H
     #define CHERRY_UPDATE_H
-    #define CHERRY_BUFFER_SIZE 1
-    #define CHERRY_RELOAD_CONFIG "r"
-
+    #define CHERRY_BUFFER_SIZE 256
+    
     #include <xcb/xcb.h>
     #include "containers.h"
 
