@@ -38,7 +38,7 @@ void setup_xcb_ewmh(void) {
         free(support_error);
         exit(EXIT_FAILURE);
     }
-    
+
     xcb_generic_error_t *name_error = set_wm_name(&child_window, strlen(WM_NAME), WM_NAME);
 
     if (name_error) {
@@ -84,8 +84,7 @@ void setup(void) {
         exit(EXIT_FAILURE);
     }
 
-    fifo_file_descriptor = open(fifo_path, O_RDONLY, O_NONBLOCK);
-
+    fifo_file_descriptor = open(fifo_path, O_RDONLY | O_NONBLOCK);
     setup_xcb_ewmh();
     start_loop();
 }
